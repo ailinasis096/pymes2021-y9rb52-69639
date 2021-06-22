@@ -1,0 +1,185 @@
+<div class="tituloPagina">
+  {{Titulo}} <small>{{TituloAccionABMC[AccionABMC]}}</small>
+</div>
+
+<!-- Formulario Filtro de busqueda, se ve cuando la accion es Listado(busqueda/listado)-->
+<form *ngIf="AccionABMC == 'L'">
+  <!-- Botones -->
+  <div class="row justify-content-center botones">
+    <button type="button" class="btn btn-primary" (click)="Buscar();">
+      <i class="fas fa-search"> </i> Buscar
+    </button>
+  </div>
+</form>
+
+<!-- Tabla de resutados de busqueda y Paginador-->
+<div id="divTablaResultados" *ngIf="AccionABMC == 'L' && Items?.length > 0">
+  <table class="table table-hover table-sm table-bordered table-striped">
+    <thead>
+      <tr>
+        <th class="text-center">Id Cursos</th>
+        <th class="text-center">Nombre</th>
+        <th class="text-center">Cupo</th>
+        <th class="text-center">Fecha</th>
+        <th class="text-center">Vigente</th>
+        <th class="text-center text-nowrap">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let Item of Items">
+        <td class="text-right">{{Item.id}}</td>
+        <td>{{Item.nombre | uppercase}}</td>
+        <td class="text-right">{{Item.cupo}}</td>
+        <td class="text-right">{{Item.fecha| date:'dd/MM/yyyy'}}</td>
+        <td>{{Item.vigente ? 'SI' : 'NO'}}</td>
+        <td class="text-center text-nowrap">
+          <button
+            class="btn btn-sm btn-outline-primary"
+            title="Modificar"
+            (click)="Modificar(Item)"
+          >
+            <i class="fas fa-pencil-alt"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!--No se encontraron registros-->
+<div
+  class="alert alert-info mensajesAlert"
+  *ngIf="AccionABMC == 'L' && Items?.length== 0"
+>
+  <i class="fas fa-exclamation-sign"></i>{{Mensajes['SD']}}
+  <!-- texto: No se encontraron registros -->
+</div>
+
+<!-- Registro en Alta,Modificacion y Consulta -->
+<form name="FormRegistro" [formGroup]="FormRegistro" *ngIf="AccionABMC != 'L'">
+  <div class="container-fluid">
+    <fieldset [disabled]="AccionABMC==='C'">
+      <!--campo nombre-->
+      <div class="row">
+        <div class="col-sm-4 col-md-3 offset-md-1">
+          <label class="col-form-label" for="nombre"
+            >Nombre<span class="text-danger">*</span>:</label
+          >
+        </div>
+        <div class="col-sm-8 col-md-6">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="nombre"
+            [ngClass]="{'is-invalid': (FormRegistro.controls.nombre.touched || submitted)  
+            && FormRegistro.controls.nombre.errors}"
+          />
+
+          <div
+            class="validacion"
+            *ngIf="(FormRegistro.controls.nombre.touched || submitted) 
+                        && FormRegistro.controls.nombre.errors?.required"
+          >
+            Dato requerido.
+          </div>
+          <div
+            class="validacion"
+            *ngIf="(FormRegistro.controls.nombre.touched || submitted) 
+                       && (FormRegistro.controls.nombre.errors?.minlength || FormRegistro.controls.nombre.errors?.maxlength) "
+          >
+            Dato texto, 4 mínimo caracteres.
+          </div>
+        </div>
+      </div>
+
+      <!--campo cupo-->
+      <div class="row">
+        <div class="col-sm-4 col-md-3 offset-md-1">
+          <label class="col-form-label" for="cupo">
+            Cupo<span class="text-danger">*</span>:
+          </label>
+        </div>
+        <div class="col-sm-8 col-md-6">
+          <input
+            type="text"
+            name="cupo"
+            class="form-control"
+            formControlName="cupo"
+            [ngClass]="{'is-invalid': (FormRegistro.controls.cupo.touched || submitted)  
+            && FormRegistro.controls.cupo.errors}"
+          />
+          <div
+            class="validacion"
+            *ngIf="(FormRegistro.controls.cupo.touched || submitted) 
+                        && FormRegistro.controls.cupo.errors?.required"
+          >
+            Dato requerido.
+          </div>
+          <div
+            class="validacion"
+            *ngIf="(FormRegistro.controls.cupo.touched || submitted) 
+                        && FormRegistro.controls.cupo.errors?.pattern"
+          >
+            Dato numérico, 1 a 7 dígitos.
+          </div>
+        </div>
+      </div>
+
+      <!--campo fecha-->
+      <div class="row">
+        <div class="col-sm-4 col-md-3 offset-md-1">
+          <label class="col-form-label"
+            >Fecha<span class="text-danger">*</span>:
+          </label>
+        </div>
+        <div class="col-sm-8 col-md-6">
+          <input
+            class="form-control"
+            formControlName="fecha"
+            name="fecha"
+            [ngClass]="{'is-invalid': (FormRegistro.controls.fecha.touched || submitted)  
+            && FormRegistro.controls.fecha.errors}"
+          />
+
+          <div
+            class="validacion"
+            *ngIf="(FormRegistro.controls.fecha.touched || submitted) 
+                       && FormRegistro.controls.fecha.errors?.required"
+          >
+            Dato requerido.
+          </div>
+          <div
+            class="validacion"
+            *ngIf="(FormRegistro.controls.fecha.touched || submitted) 
+                       && FormRegistro.controls.fecha.errors?.pattern"
+          >
+            Dato fecha, formato dd/mm/aaaa.
+          </div>
+        </div>
+      </div>
+
+      <!--campo activo-->
+      <div class="row">
+        <div class="col-sm-4 col-md-3 offset-md-1">
+          <label class="col-form-label" for="vigente">Vigente:</label>
+        </div>
+        <div class="col-sm-8 col-md-6">
+          <!-- ref?? disabled html no fucniona en reactive forms? -->
+          <select
+            class="form-control"
+            name="vigente"
+            formControlName="vigente"
+            [attr.disabled]="true"
+          >
+            <option *ngFor="let opt of OpcionesActivo" [ngValue]="opt.Id">
+              ‌{{ opt.Nombre }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Botones Grabar, Cancelar/Volver' -->
+    <hr />
+  </div>
+</form>

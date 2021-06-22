@@ -1,7 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ArticuloFamilia } from '../../models/articulo-familia';
-import { ArticulosService } from '../../services/articulos.service';
-import { ArticulosFamiliasService } from '../../services/articulos-familias.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDialogService } from '../../services/modal-dialog.service';
 import { Cursos } from '../../models/cursos';
@@ -28,8 +25,6 @@ export class CursosComponent implements OnInit {
 
   Items: Cursos[] = null;
   RegistrosTotal: number;
-
-  Pagina = 1; // inicia pagina 1
 
   // opciones del combo activo
   OpcionesActivo = [
@@ -94,7 +89,7 @@ export class CursosComponent implements OnInit {
 
   // comienza la modificacion, luego la confirma con el metodo Grabar
   Modificar(Dto) {
-    if (!Dto.v igente) {
+    if (!Dto.vigente) {
       this.modalDialogService.Alert(
         'No puede modificarse un registro Inactivo.'
       );
