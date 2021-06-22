@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   //ConexionWebApiProxy : "/api/"  //usarlo cuando backend y frontend estan en el mismo servidor
-  ConexionWebApiProxy: 'https://pav2.azurewebsites.net/api/' //disponibles desde internet
+  ConexionWebApiProxy: 'https://us-central1-pav2api.cloudfunctions.net/app/api/' //disponibles desde internet
   //ConexionWebApiProxy: 'https://labsys.frc.utn.edu.ar:8443/api/' //disponibles desde internet
 
   // ConexionWebApiProxy: 'https://localhost:44349/api/'   // solo localmente

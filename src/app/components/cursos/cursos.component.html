@@ -16,9 +16,9 @@
 <div id="divTablaResultados" *ngIf="AccionABMC == 'L' && Items?.length > 0">
   <table class="table table-hover table-sm table-bordered table-striped">
     <thead>
-      <tr>
-        <th class="text-center">Id Cursos</th>
-        <th class="text-center">Nombre</th>
+      <tr class="bg-info">
+        <th class="text-center ">Id Cursos</th>
+        <th class="text-center ">Nombre</th>
         <th class="text-center">Cupo</th>
         <th class="text-center">Fecha</th>
         <th class="text-center">Vigente</th>
@@ -26,7 +26,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let Item of Items">
+      <tr class="table-info" *ngFor="let Item of Items">
         <td class="text-right">{{Item.id}}</td>
         <td>{{Item.nombre | uppercase}}</td>
         <td class="text-right">{{Item.cupo}}</td>
@@ -165,12 +165,7 @@
         </div>
         <div class="col-sm-8 col-md-6">
           <!-- ref?? disabled html no fucniona en reactive forms? -->
-          <select
-            class="form-control"
-            name="vigente"
-            formControlName="vigente"
-            [attr.disabled]="true"
-          >
+          <select class="form-control" name="vigente" formControlName="vigente">
             <option *ngFor="let opt of OpcionesActivo" [ngValue]="opt.Id">
               ‌{{ opt.Nombre }}
             </option>
@@ -181,5 +176,27 @@
 
     <!-- Botones Grabar, Cancelar/Volver' -->
     <hr />
+    <div class="row justify-content-center botones">
+      <button
+        type="button"
+        *ngIf="AccionABMC!=='C'"
+        class="btn btn-primary"
+        (click)="Grabar()"
+      >
+        <i class="fas fa-check"></i> Grabar
+      </button>
+      &nbsp;
+      <button type="button" class="btn btn-warning" (click)="Volver()">
+        <i class="fas fa-undo"></i> {{AccionABMC=='C' ? 'Volver' : 'Cancelar'}}
+      </button>
+    </div>
+
+    <!--texto: Revisar los datos ingresados...-->
+    <div
+      *ngIf="submitted && FormRegistro.invalid"
+      class="row alert alert-danger mensajesAlert"
+    >
+      <i class="fas fa-exclamation-sign"></i>{{Mensajes['RD']}}
+    </div>
   </div>
 </form>

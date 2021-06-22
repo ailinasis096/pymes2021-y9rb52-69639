@@ -122,7 +122,7 @@ export class CursosComponent implements OnInit {
 
     // agregar put
     if (this.AccionABMC != 'A') {
-      this.cursosService.put(itemCopy.Id, itemCopy).subscribe((res: any) => {
+      this.cursosService.put(itemCopy.id, itemCopy).subscribe((res: any) => {
         this.Volver();
         this.modalDialogService.Alert('Registro modificado correctamente.');
         this.Buscar();
